@@ -29,13 +29,15 @@ import './editor.scss';
  *
  * @return {WPElement} Element to render.
  */
-export default function Edit() {
+export default function Edit({attributes, setAttributes}) {
+	function buttonHandler (event){
+		console.log("Clicked");
+	}
+
 	return (
-		<p { ...useBlockProps() }>
-			{ __(
-				'Gutenberg Blocks – hello from the editor!',
-				'gutenberg-blocks'
-			) }
-		</p>
+		<>
+			<button type="button" className='gt-botton' target="_blank"  onClick={buttonHandler}>{attributes.text}</button>
+		</>
+
 	);
 }

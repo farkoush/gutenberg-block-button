@@ -22,13 +22,11 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {WPElement} Element to render.
  */
-export default function save() {
+export default function save({attributes:{text}}) {
 	return (
-		<p { ...useBlockProps.save() }>
-			{ __(
-				'Gutenberg Blocks – hello from the saved content!',
-				'gutenberg-blocks'
-			) }
+		// <p { ...useBlockProps.save() }>
+		<p>
+			<button type="button">{text}</button>
 		</p>
 	);
 }

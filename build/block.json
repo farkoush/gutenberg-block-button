@@ -11,8 +11,13 @@
     "alignment": {
       "type": "string"
     },
-    "bgcolor": {
-      "type": "string"
+    "bg_color": {
+      "type": "string",
+      "default": "#000000"
+    },
+    "text_color": {
+      "type": "string",
+      "default": "#ffffff"
     },
     "text": {
       "type": "string",
@@ -23,6 +28,12 @@
     },
     "sourcepage": {
       "type": "string"
+    },
+    "message": {
+      "type": "string",
+      "source": "text",
+      "selector": "div",
+      "default": ""
     }
   },
   "supports": {

@@ -9,10 +9,18 @@
 	"description": "Example static block scaffolded with Create Block tool.",
 	"attributes": {
 		"alignment" : {"type": "string"},
-		"bgcolor": {"type":"string"},
+		"bg_color": {"type":"string",  "default": "#000000"},
+		"text_color": { "type": "string", "default": "#ffffff" },
 		"text": {"type":"string", "default":"Clicked Me!"},
 		"target": {"type":"string"},
-		"sourcepage": {"type":"string"}
+		"sourcepage": {"type":"string"},
+
+		"message": {
+            "type": "string",
+            "source": "text",
+            "selector": "div",
+            "default": ""
+        }
     },
 	"supports": {
 		"html": false

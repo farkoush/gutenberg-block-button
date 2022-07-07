@@ -15,5 +15,5 @@ registerBlockType(metadata.name,{
     category: metadata.category,
 	attributes: metadata.attributes,
     edit: Edit,
-    save,
+    save: () => {return null}
 });

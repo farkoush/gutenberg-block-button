@@ -2,8 +2,6 @@ import { __ } from '@wordpress/i18n';
 // import { useState } from '@wordpress/element';
 
 import Inspector from './Inspector';
-
-
 import './editor.scss';
 
 export default function Edit({attributes, setAttributes}) {
@@ -18,21 +16,24 @@ export default function Edit({attributes, setAttributes}) {
 	// },[]);
 
 	return (
-		<div>
+		<div 
+			className="container"
+			style={{textAlign: attributes.alignment}}
+		>
 				<Inspector value={{attributes, setAttributes}} />
-				<button 
-				 	type="button" 
-					className='gt-botton' 
+				<a 
+					href = '#'
+					className="gt-button" 
 					target= {attributes.target}  
 					onClick={buttonHandler}
-					onChange={ ( val ) => setAttributes( { message: val } ) }
+					onChange={ ( val ) => setAttributes( { text: val } ) }
 					style={ {
                         backgroundColor: attributes.bg_color,
                         color: attributes.text_color,
-						textAlign: attributes.alignment
-                    } }>
+                    } }
+				>
 						{attributes.text}
-				</button>
+				</a>
 		</div>
 
 	);

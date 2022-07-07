@@ -1,7 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { TextControl , SelectControl } from '@wordpress/components';
 import {
-    useBlockProps,
     ColorPalette,
     InspectorControls,
 } from '@wordpress/block-editor';
@@ -10,11 +9,12 @@ import {
 const Inspector = ({value:{attributes,setAttributes}}) => {
     //Defaults
 	const colors = [
-        { name: 'red', color: '#f00' },
+        { name: 'black', color: '#000' },
         { name: 'white', color: '#fff' },
-        { name: 'blue', color: '#00f' },
+        { name: 'primary', color: '#1a73e8' },
     ];
 
+    //Handlers
     const onChangeBGColor = ( hexColor ) => {
 		setAttributes( { bg_color: hexColor } );
 	};
@@ -62,7 +62,7 @@ const Inspector = ({value:{attributes,setAttributes}}) => {
                 />
                 <TextControl
                     label="Button Text"
-                    // value={ className }
+                    value={ attributes.text }
                     onChange={ ( text ) => setAttributes( {text} ) }
                 />
             </div>

@@ -18,8 +18,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/api-fetch */ "@wordpress/api-fetch");
+/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
+/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__);
+
+
 
 
 
@@ -33,6 +37,7 @@ const Inspector = _ref => {
     }
   } = _ref;
   //Defaults
+  const [pages, setPages] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const colors = [{
     name: 'black',
     color: '#000'
@@ -56,18 +61,30 @@ const Inspector = _ref => {
     });
   };
 
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default()({
+      path: '/wp/v2/pages'
+    }).then(pagesData => {
+      setPages(pagesData.map(page => ({
+        id: page.id,
+        slug: page.slug,
+        title: page.title.rendered,
+        type: page.type
+      })));
+    });
+  }, []);
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.InspectorControls, {
     key: "setting"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     id: "gutenberg-blocks-controls"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("legend", {
     className: "blocks-base-control__label"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background color', 'gutenberg-blocks')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.ColorPalette, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Background color', 'gutenberg-blocks')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.ColorPalette, {
     colors: colors,
     onChange: onChangeBGColor
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("fieldset", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("legend", {
     className: "blocks-base-control__label"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text color', 'gutenberg-blocks')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.ColorPalette, {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text color', 'gutenberg-blocks')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_4__.ColorPalette, {
     colors: colors,
     clearable: true,
     onChange: onChangeTextColor
@@ -92,14 +109,26 @@ const Inspector = _ref => {
     value: attributes.target,
     options: [{
       label: 'Default',
-      value: ''
+      value: "_self"
     }, {
       label: 'New Window',
-      value: '__target'
+      value: "_blank"
     }],
     onChange: target => setAttributes({
       target
     })
+  }), pages !== undefined && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+    label: "Page",
+    value: attributes.pageID,
+    options: pages.map(page => ({
+      label: page.title,
+      value: page.id
+    })),
+    onChange: ID => {
+      setAttributes({
+        pageID: ID
+      });
+    }
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
     label: "Button Text",
     value: attributes.text,
@@ -130,7 +159,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Inspector__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Inspector */ "./src/Inspector.js");
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
 
- // import { useState } from '@wordpress/element';
 
 
 
@@ -143,11 +171,7 @@ function Edit(_ref) {
   //Handlers
   function buttonHandler(event) {
     console.log("Clicked");
-  } // useEffect(() => {
-  // 	// Update the document title using the browser API
-  // 	wp.apiFetch( { path: '/wp-json/wp/v2/posts/' } ).then( pages => { );}); 
-  // },[]);
-
+  }
 
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "container",
@@ -223,6 +247,16 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "@wordpress/api-fetch":
+/*!**********************************!*\
+  !*** external ["wp","apiFetch"] ***!
+  \**********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["apiFetch"];
+
+/***/ }),
+
 /***/ "@wordpress/block-editor":
 /*!*************************************!*\
   !*** external ["wp","blockEditor"] ***!
@@ -279,7 +313,7 @@ module.exports = window["wp"]["i18n"];
   \************************/
 /***/ ((module) => {
 
-module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"gutenberg-blocks/button","version":"0.1.0","title":"GT Button","category":"common","icon":"smiley","description":"Example static block scaffolded with Create Block tool.","attributes":{"alignment":{"type":"string"},"bg_color":{"type":"string","default":"#000000"},"text_color":{"type":"string","default":"#ffffff"},"text":{"type":"string","default":"Clicked Me!"},"target":{"type":"string"},"sourcepage":{"type":"string"},"message":{"type":"string","source":"text","selector":"div","default":""}},"supports":{"html":false},"textdomain":"gutenberg-blocks","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
+module.exports = JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":2,"name":"gutenberg-blocks/button","version":"0.1.0","title":"GT Button","category":"common","icon":"smiley","description":"Example static block scaffolded with Create Block tool.","attributes":{"alignment":{"type":"string"},"bg_color":{"type":"string","default":"#000000"},"text_color":{"type":"string","default":"#ffffff"},"text":{"type":"string","default":"Clicked Me!"},"target":{"type":"string"},"sourcepage":{"type":"string"},"pageID":{"type":"string"}},"supports":{"html":false},"textdomain":"gutenberg-blocks","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css"}');
 
 /***/ })
 

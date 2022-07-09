@@ -32,12 +32,13 @@ function adminAssets(){
 	));
   
 	function render_callback_save($attributes) {
+		// print_r($attributes['target']); exit;
 		ob_start(); ?>
 			<div style="text-align: <?= $attributes['alignment'] ?>">
 				<a
-					href="#"
+					href="<?= get_permalink($attributes['pageID']) ?>"
 					class= 'button gt-button'
-					target= <?= $attributes['target']?>
+					target= "<?= $attributes['target']?>"
 					style="
 						background-color: <?= $attributes['bg_color']?>;
 						color: <?= $attributes['text_color']?>;

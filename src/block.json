@@ -14,13 +14,7 @@
 		"text": {"type":"string", "default":"Clicked Me!"},
 		"target": {"type":"string"},
 		"sourcepage": {"type":"string"},
-
-		"message": {
-            "type": "string",
-            "source": "text",
-            "selector": "div",
-            "default": ""
-        }
+		"pageID"     : {"type" : "string"}
     },
 	"supports": {
 		"html": false

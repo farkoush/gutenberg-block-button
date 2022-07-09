@@ -29,11 +29,8 @@
     "sourcepage": {
       "type": "string"
     },
-    "message": {
-      "type": "string",
-      "source": "text",
-      "selector": "div",
-      "default": ""
+    "pageID": {
+      "type": "string"
     }
   },
   "supports": {

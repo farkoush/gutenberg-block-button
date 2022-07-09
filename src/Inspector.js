@@ -1,5 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { TextControl , SelectControl } from '@wordpress/components';
+import apiFetch from '@wordpress/api-fetch';
+import { useEffect, useState } from '@wordpress/element';
+
 import {
     ColorPalette,
     InspectorControls,
@@ -8,6 +11,8 @@ import {
 
 const Inspector = ({value:{attributes,setAttributes}}) => {
     //Defaults
+    const[pages,setPages] = useState([])
+
 	const colors = [
         { name: 'black', color: '#000' },
         { name: 'white', color: '#fff' },
@@ -23,6 +28,18 @@ const Inspector = ({value:{attributes,setAttributes}}) => {
 		setAttributes( { text_color: hexColor } );
 	};
 
+    useEffect(() => {
+		apiFetch( { path: '/wp/v2/pages' } ).then( 
+			( pagesData ) => {
+				setPages(pagesData.map((page)=>({
+                    id:   page.id, 
+                    slug: page.slug, 
+                    title:page.title.rendered, 
+                    type: page.type
+                })))
+		} ); 
+	},[]);
+
     return(
         <InspectorControls key="setting">
             <div id="gutenberg-blocks-controls">
@@ -31,8 +48,8 @@ const Inspector = ({value:{attributes,setAttributes}}) => {
                         { __( 'Background color', 'gutenberg-blocks' ) }
                     </legend>
                     <ColorPalette 
-                        colors={ colors }
-                        onChange={ onChangeBGColor }
+                        colors = { colors }
+                        onChange = { onChangeBGColor }
                     />
                 </fieldset>
                 <fieldset>
@@ -40,12 +57,12 @@ const Inspector = ({value:{attributes,setAttributes}}) => {
                         { __( 'Text color', 'gutenberg-blocks' ) }
                     </legend>
                     <ColorPalette
-                        colors={ colors } 
+                        colors = { colors } 
                         clearable = {true}
-                        onChange={ onChangeTextColor }
+                        onChange = { onChangeTextColor }
                     />
                 </fieldset>
-                <SelectControl label="Alignment" value={ attributes.alignment }
+                <SelectControl label="Alignment" value = { attributes.alignment }
                     options={ [
                         { label: 'Right', value: 'right' },
                         { label: 'Center', value: 'center' },
@@ -53,17 +70,23 @@ const Inspector = ({value:{attributes,setAttributes}}) => {
                     ] }
                     onChange={ alignment => setAttributes({alignment}) }
                 />
-                <SelectControl label="Target" value={ attributes.target }
+                <SelectControl label="Target" value = { attributes.target }
                     options={ [
-                        { label: 'Default', value: '' },
-                        { label: 'New Window', value: '__target' },
+                        { label: 'Default', value: "_self" },
+                        { label: 'New Window', value: "_blank" },
                     ] }
                     onChange={ target => setAttributes({target}) }
                 />
+                {pages !== undefined &&
+                <SelectControl label="Page" value = { attributes.pageID }
+                    options  = { pages.map((page)=>({ label: page.title, value: page.id }))}
+                    onChange = { ID => { setAttributes({pageID : ID}) } }
+                />
+                }           
                 <TextControl
-                    label="Button Text"
-                    value={ attributes.text }
-                    onChange={ ( text ) => setAttributes( {text} ) }
+                    label = "Button Text"
+                    value = { attributes.text }
+                    onChange = { ( text ) => setAttributes( {text} ) }
                 />
             </div>
         </InspectorControls>
